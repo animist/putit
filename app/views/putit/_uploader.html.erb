@@ -10,7 +10,7 @@ $(function() {
         $uploader = $($this.get(0).contentWindow.document),
         $input = $uploader.find(':input'); 
     if ($this.attr('height') == undefined) $this.height(this.contentWindow.document.documentElement.scrollHeight);
-    $input.bind('change', function() {
+    $input.live('change', function() {
       var $form = $(this).parent('form');
       $form.ajaxSubmit({
         dataType: 'json',
