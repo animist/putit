@@ -9,6 +9,21 @@ $(function() {
     var $this = $(this)
         $uploader = $($this.get(0).contentWindow.document),
         $input = $uploader.find(':input'); 
+    if ($.browser.msie) {
+      setInterval(function() {
+        if ($uploader.find('input[type=file]').val() != "") {
+          alert("uploading");
+          $form.ajaxSubmit({
+            dataType: 'json',
+            success: function(data, status, xhr) {
+              if (data.status === 'OK') {
+                $this.next().find('.thumbnail')
+                  .attr('src', data.body.tmp_filepath).show()
+                  .next().val(data.body.filename);
+              }
+            }
+      }, 500)
+    }
     if ($this.attr('height') == undefined) $this.height(this.contentWindow.document.documentElement.scrollHeight);
     $input.live('change', function() {
       var $form = $(this).parent('form');
