@@ -1,0 +1,43 @@
+<iframe class="putit_upload" id="putit_uploader_<%= method %>" src="<%= putit_show_path %>" frameborder="0"></iframe>
+<div>
+  <%= image_tag val, options.merge(:alt => '', :style => "display:#{val.blank? ? 'none' : 'inline'}", :class => 'thumbnail') %>
+  <%= f.hidden_field method %>
+</div>
+<script>
+$(function() {
+  $('#putit_uploader_<%= method %>').bind('load', function() {
+    var $this = $(this)
+        $uploader = $($this.get(0).contentWindow.document),
+        $input = $uploader.find(':input'); 
+
+    if ($.browser.msie) $this.height('2em'); 
+    else if ($this.attr('height') == undefined) $this.height(this.contentWindow.document.documentElement.scrollHeight);
+    $input.bind('change', function() {
+      if ($.browser.msie) {
+        var $form = $uploader.find('form');
+      } else {
+        var $form = $(this).parent('form');
+      }
+      $form.ajaxSubmit({
+        dataType: 'text',
+        success: function(data, status, xhr) {
+          data = $.parseJSON(data);
+          if (data.status === 'OK') {
+            $this.next().find('.thumbnail')
+              .attr('src', data.body.tmp_filepath).show()
+              .next().val(data.body.filename);
+          }
+        }
+      });
+    });
+    $uploader.find('.remove').click(function() {
+      $input.val('');
+      $this.next().find('.thumbnail')
+        .hide()
+        .next().val('');
+    });
+  });
+
+  if ($.browser.msie) $('#putit_uploader_picture').get(0).contentWindow.location.reload();
+});
+</script>
