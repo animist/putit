@@ -10,10 +10,10 @@ $(function() {
         $uploader = $($this.get(0).contentWindow.document),
         $input = $uploader.find(':input'); 
 
-    if ($.browser.msie) $this.height('2em'); 
+    if (document.uniqueID) $this.height('2em'); 
     else if ($this.attr('height') == undefined) $this.height(this.contentWindow.document.documentElement.scrollHeight);
     $input.bind('change', function() {
-      if ($.browser.msie) {
+      if (document.uniqueID) {
         var $form = $uploader.find('form');
       } else {
         var $form = $(this).parent('form');
@@ -38,6 +38,6 @@ $(function() {
     });
   });
 
-  if ($.browser.msie) $('#putit_uploader_picture').get(0).contentWindow.location.reload();
+  if (document.uniqueID) $('#putit_uploader_picture').get(0).contentWindow.location.reload();
 });
 </script>
